@@ -26,7 +26,7 @@
       </a-plane>
 
       <!-- Raycaster for Oculus interaction -->
-      <a-entity oculus-touch-controls="hand: right" raycaster="objects: #playButton" raycaster-show-line="true" raycaster-line-color="#4CC3D9"></a-entity>
+      <a-entity oculus-touch-controls="hand: right" raycaster="objects: #thumbnail, #playButton" raycaster-show-line="true" raycaster-line-color="#4CC3D9"></a-entity>
 
       <script>
         // Get the video and thumbnail elements
@@ -45,9 +45,12 @@
           // Show the video and play button
           video.setAttribute('visible', 'true');
           playButton.setAttribute('visible', 'true');
-          
+
           // Hide the thumbnail
           thumbnail.setAttribute('visible', 'false');
+
+          // Play the video
+          video.play();
         });
 
         // Add click event listener to the play button
