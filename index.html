@@ -17,34 +17,24 @@
       <!-- Thumbnail image for the video -->
       <a-image src="./assets/paul.jpg" width="16" height="9" position="0 2 -10" id="thumbnail"></a-image>
 
-      <!-- Video player with a play button -->
+      <!-- Video player -->
       <a-video src="./assets/coba.mp4" width="16" height="9" position="0 2 -10" id="video" visible="false"></a-video>
 
-      <!-- Play button -->
-      <a-plane position="0 1.5 -5" rotation="-90 0 0" width="2" height="2" color="#333" id="playButton">
-        <a-text value="▶️" color="#fff" position="-0.8 0 0.1"></a-text>
-      </a-plane>
-
       <!-- Raycaster for Oculus interaction -->
-      <a-entity oculus-touch-controls="hand: right" raycaster="objects: #thumbnail, #playButton" raycaster-show-line="true" raycaster-line-color="#4CC3D9"></a-entity>
+      <a-entity oculus-touch-controls="hand: right" raycaster="objects: #thumbnail" raycaster-show-line="true" raycaster-line-color="#4CC3D9"></a-entity>
 
       <script>
         // Get the video and thumbnail elements
         var video = document.getElementById('video');
         var thumbnail = document.getElementById('thumbnail');
 
-        // Get the play button element
-        var playButton = document.getElementById('playButton');
-
-        // Hide the video and play button initially
+        // Hide the video initially
         video.setAttribute('visible', 'false');
-        playButton.setAttribute('visible', 'false');
 
         // Add click event listener to the thumbnail
         thumbnail.addEventListener('click', function() {
-          // Show the video and play button
+          // Show the video
           video.setAttribute('visible', 'true');
-          playButton.setAttribute('visible', 'true');
 
           // Hide the thumbnail
           thumbnail.setAttribute('visible', 'false');
@@ -53,24 +43,12 @@
           video.play();
         });
 
-        // Add click event listener to the play button
-        playButton.addEventListener('click', function() {
-          if (video.paused) {
-            // Play the video
-            video.play();
-            // Hide the play button
-            playButton.setAttribute('visible', 'false');
-          }
-        });
-
         // Raycaster interaction
         var raycasterEl = document.querySelector('[oculus-touch-controls]');
         raycasterEl.addEventListener('raycaster-intersected', function () {
           if (!video.paused) {
             // Pause the video if it's playing
             video.pause();
-            // Show the play button
-            playButton.setAttribute('visible', 'true');
           }
         });
       </script>
