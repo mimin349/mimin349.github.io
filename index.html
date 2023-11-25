@@ -14,13 +14,8 @@
       <!-- Text in VR space -->
       <a-text font="kelsonsans" value="fu pinjem duit" width="6" position="-2.5 0.25 -1.5" rotation="0 15 0"></a-text>
 
-      <!-- Thumbnail image for the video -->
-      <a-image src="./assets/paul.jpg" width="16" height="9" position="0 2 -10" id="thumbnail"></a-image>
-
-      <!-- Play button -->
-      <a-plane position="0 2 -10" rotation="-90 0 0" width="2" height="2" color="#333" id="playButton" visible="false">
-        <a-text value="▶️" color="#fff" position="-0.8 0 0.1"></a-text>
-      </a-plane>
+     <!-- Thumbnail image for the video -->
+     <a-image src="./assets/paul.jpg" width="16" height="9" position="0 2 -10" id="thumbnail" onclick="toggleVideo()"></a-image>
 
       <!-- Video player -->
       <a-video src="./assets/coba.mp4" width="16" height="9" position="0 2 -10" id="video" visible="false"></a-video>
@@ -29,22 +24,14 @@
       <a-entity oculus-touch-controls="hand: right" raycaster="objects: #thumbnail" raycaster-show-line="true" raycaster-line-color="#4CC3D9"></a-entity>
 
 <script>
-  // Get the video, thumbnail, and play button elements
+  // Get the video element
   var video = document.getElementById('video');
-  var thumbnail = document.getElementById('thumbnail');
-  var playButton = document.getElementById('playButton');
-
-  // Hide the video initially
-  video.setAttribute('visible', 'false');
-
-  // Add click event listener to the thumbnail
-  thumbnail.addEventListener('click', toggleVideo);
-
-  // Add click event listener to the play button
-  playButton.addEventListener('click', toggleVideo);
 
   // Function to toggle video playback
   function toggleVideo() {
+    var thumbnail = document.getElementById('thumbnail');
+    var playButton = document.getElementById('playButton');
+
     if (video.paused) {
       // Play the video
       video.play();
@@ -66,6 +53,7 @@
     }
   });
 </script>
+
 
     </a-scene>
   </body>
