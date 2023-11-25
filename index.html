@@ -24,36 +24,34 @@
       <!-- Raycaster for Oculus interaction -->
       <a-entity oculus-touch-controls="hand: both" raycaster="objects: #thumbnail" raycaster-show-line="true" raycaster-line-color="#4CC3D9"></a-entity>
 
-<script>
-  // Get the video element
-  var video = document.getElementById('video');
-
-  // Function to toggle video playback
-  function toggleVideo() {
-    var thumbnail = document.getElementById('thumbnail');
-
-    if (video.paused) {
-      // Play the video
-      video.play();
-      // Hide the thumbnail and play button
-      video.setAttribute('visible', 'true');
-      thumbnail.setAttribute('visible', 'false');
-    } else {
-      // Pause the video
-      video.pause();
-    }
-  }
-
-  // Raycaster interaction
-  var raycasterEl = document.querySelector('[oculus-touch-controls]');
-  raycasterEl.addEventListener('raycaster-intersected', function () {
-    if (!video.paused) {
-      // Pause the video if it's playing
-      video.pause();
-    }
-  });
-</script>
-
+      <script>
+        // Get the video element
+        var video = document.getElementById('video');
+      
+        // Function to toggle video playback
+        function toggleVideo() {
+          var thumbnail = document.getElementById('thumbnail');
+      
+          if (video && video.paused) {
+            // Play the video
+            video.play();
+            // Hide the thumbnail
+            thumbnail.setAttribute('visible', 'false');
+          } else {
+            // Pause the video
+            video.pause();
+          }
+        }
+      
+        // Raycaster interaction
+        var raycasterEl = document.querySelector('[oculus-touch-controls]');
+        raycasterEl.addEventListener('raycaster-intersected', function () {
+          if (video && !video.paused) {
+            // Pause the video if it's playing
+            video.pause();
+          }
+        });
+      </script>
 
     </a-scene>
   </body>
