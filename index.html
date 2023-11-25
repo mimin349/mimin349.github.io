@@ -16,19 +16,20 @@
       <a-sky src="./assets/oldfield.jpg" rotation="0 -130 0"></a-sky>
 
       <!-- Text in VR space -->
-      <a-text font="kelsonsans" value="fu pinjem duit" width="6" position="-2.5 0.25 -1.5" rotation="0 15 0"></a-text>
+      <a-text font="kelsonsans" value="360 image with video" width="6" position="-2.5 0.25 -1.5" rotation="0 15 0"></a-text>
 
-     <!-- Thumbnail image for the video -->
-     <a-image src="./assets/paul.jpg" width="16" height="9" position="0 2 -10" id="thumbnail" onclick="toggleVideo()"></a-image>
+      <!-- Thumbnail image for the video -->
+      <a-image src="./assets/paul.jpg" width="16" height="9" position="0 2 -10" id="thumbnail" onclick="toggleVideo()"></a-image>
 
       <!-- Video player -->
       <a-video src="./assets/coba.mp4" width="16" height="9" position="0 2 -10" id="video" visible="false"></a-video>
 
       <!-- Raycaster for Oculus interaction -->
-      <a-entity oculus-touch-controls="hand: right" raycaster="objects: #thumbnail" raycaster-show-line="true" raycaster-line-color="#4CC3D9"></a-entity>
+      <a-entity oculus-touch-controls="hand: both" raycaster="objects: #thumbnail" raycaster-show-line="true" raycaster-line-color="#4CC3D9"></a-entity>
 
       <!-- WebXR hand tracking -->
-      <a-entity id="hands" hand-tracking-controls></a-entity>
+      <a-entity id="leftHand" hand-tracking-controls="hand: left" raycaster="objects: .raycastable"></a-entity>
+      <a-entity id="rightHand" hand-tracking-controls="hand: right" raycaster="objects: .raycastable" line="color: #118A7E"></a-entity>
 
       <script>
         // Get the video element
@@ -49,9 +50,18 @@
           }
         }
 
-        // Raycaster interaction
+        // Raycaster interaction for Oculus controls
         var raycasterEl = document.querySelector('[oculus-touch-controls]');
         raycasterEl.addEventListener('raycaster-intersected', function () {
+          if (video && !video.paused) {
+            // Pause the video if it's playing
+            video.pause();
+          }
+        });
+
+        // Raycaster interaction for WebXR hand tracking
+        var handsEl = document.getElementById('hands');
+        handsEl.addEventListener('raycaster-intersected', function () {
           if (video && !video.paused) {
             // Pause the video if it's playing
             video.pause();
