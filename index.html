@@ -25,7 +25,7 @@
       <a-video src="./assets/coba.mp4" width="16" height="9" position="0 2 -10" id="video" visible="false"></a-video>
 
       <!-- Raycaster for Oculus interaction -->
-      <a-entity oculus-touch-controls="hand: right" raycaster="objects: #thumbnail" raycaster-show-line="true" raycaster-line-color="#4CC3D9"></a-entity>
+      <a-entity oculus-touch-controls="hand: right" raycaster="showLine: true; far: 100; interval: 1000; objects: .raycastable" line="color: #4CC3D9"></a-entity>
 
       <!-- WebXR hand tracking with cursor -->
       <a-entity hand-tracking-controls="hand: left; modelColor: red;"></a-entity>
