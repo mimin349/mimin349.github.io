@@ -13,7 +13,7 @@
   <body>
     <a-scene>
       <!-- 360-degree image background -->
-      <a-sky src="./assets/oldfield.jpg" rotation="0 -130 0"></a-sky>
+      <a-sky src="./assets/Panorama.jpg" rotation="0 -130 0"></a-sky>
 
       <!-- Text in VR space -->
       <a-text font="kelsonsans" value="360 image with video" width="6" position="-2.5 0.25 -1.5" rotation="0 15 0"></a-text>
@@ -27,23 +27,13 @@
       <!-- Raycaster for Oculus interaction -->
       <a-entity oculus-touch-controls="hand: both" raycaster="objects: #thumbnail" raycaster-show-line="true" raycaster-line-color="#4CC3D9"></a-entity>
 
-      <!-- WebXR hand tracking -->
-      <a-entity id="leftHand" hand-tracking-controls="hand: left" raycaster="objects: .raycastable" line="color: #FF0000" scale="2 2 2">
-        <a-sphere position="0 0 -1"></a-sphere>
+      <!-- WebXR hand tracking with cursor -->
+      <a-entity id="leftHand" hand-tracking-controls="hand: left; modelColor: red;" raycaster="objects: .raycastable" scale="2 2 2">
+        <a-sphere radius="0.03" color="red"></a-sphere>
       </a-entity>
-      <a-entity id="rightHand" hand-tracking-controls="hand: right" raycaster="objects: .raycastable" line="color: #00FF00" scale="2 2 2">
-        <a-sphere position="0 0 -1"></a-sphere>
+      <a-entity id="rightHand" hand-tracking-controls="hand: right; modelColor: green;" raycaster="objects: .raycastable" scale="2 2 2">
+        <a-sphere radius="0.03" color="green"></a-sphere>
       </a-entity>
-
-      <!-- Button to exit VR mode -->
-      <a-entity
-        position="0 1.5 -2"
-        text="value: Exit VR; align: center; color: white; width: 6"
-        geometry="primitive: plane; width: 2; height: 0.5"
-        material="color: #555; opacity: 0.7"
-        onclick="exitVR()"
-        class="raycastable"
-      ></a-entity>
 
       <script>
         // Get the video element
@@ -62,11 +52,6 @@
             // Pause the video
             video.pause();
           }
-        }
-
-        // Function to exit VR mode
-        function exitVR() {
-          document.exitFullscreen();
         }
 
         // Raycaster interaction for Oculus controls
