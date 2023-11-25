@@ -4,8 +4,11 @@
     <meta charset="utf-8">
     <title>360&deg; Image with Video</title>
     <meta name="description" content="360&deg; Image with Video - A-Frame">
-    <script src="https://aframe.io/releases/1.0.4/aframe.min.js"></script>
-    <script src="./assets/aframe-master.js"></script>
+    <script src="https://aframe.io/releases/1.2.0/aframe.min.js"></script>
+    <script src="https://cdn.rawgit.com/donmccurdy/aframe-extras/v6.0.0/dist/aframe-extras.min.js"></script>
+    <script src="https://cdn.rawgit.com/donmccurdy/aframe-extras/v6.0.0/dist/aframe-extras.loaders.min.js"></script>
+    <script src="https://cdn.rawgit.com/donmccurdy/aframe-extras/v6.0.0/dist/aframe-extras.animation.min.js"></script>
+    <script src="https://cdn.rawgit.com/donmccurdy/aframe-extras/v6.0.0/dist/aframe-extras.controls.min.js"></script>
   </head>
   <body>
     <a-scene>
@@ -22,16 +25,19 @@
       <a-video src="./assets/coba.mp4" width="16" height="9" position="0 2 -10" id="video" visible="false"></a-video>
 
       <!-- Raycaster for Oculus interaction -->
-      <a-entity oculus-touch-controls="hand: both" raycaster="objects: #thumbnail" raycaster-show-line="true" raycaster-line-color="#4CC3D9"></a-entity>
+      <a-entity oculus-touch-controls="hand: right" raycaster="objects: #thumbnail" raycaster-show-line="true" raycaster-line-color="#4CC3D9"></a-entity>
+
+      <!-- WebXR hand tracking -->
+      <a-entity id="hands" hand-tracking-controls></a-entity>
 
       <script>
         // Get the video element
         var video = document.getElementById('video');
-      
+
         // Function to toggle video playback
         function toggleVideo() {
           var thumbnail = document.getElementById('thumbnail');
-      
+
           if (video && video.paused) {
             // Play the video
             video.play();
@@ -42,7 +48,7 @@
             video.pause();
           }
         }
-      
+
         // Raycaster interaction
         var raycasterEl = document.querySelector('[oculus-touch-controls]');
         raycasterEl.addEventListener('raycaster-intersected', function () {
@@ -52,7 +58,6 @@
           }
         });
       </script>
-
     </a-scene>
   </body>
 </html>
