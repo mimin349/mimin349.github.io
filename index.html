@@ -21,7 +21,7 @@
       <a-video src="./assets/coba.mp4" width="16" height="9" position="0 2 -10" id="video" visible="false"></a-video>
 
       <!-- Raycaster for Oculus interaction -->
-      <a-entity oculus-touch-controls="hand: right" raycaster="objects: #thumbnail" raycaster-show-line="true" raycaster-line-color="#4CC3D9"></a-entity>
+      <a-entity oculus-touch-controls="hand: both" raycaster="objects: #thumbnail" raycaster-show-line="true" raycaster-line-color="#4CC3D9"></a-entity>
 
 <script>
   // Get the video element
@@ -35,8 +35,8 @@
       // Play the video
       video.play();
       // Hide the thumbnail and play button
+      video.setAttribute('visible', 'true');
       thumbnail.setAttribute('visible', 'false');
-      playButton.setAttribute('visible', 'false');
     } else {
       // Pause the video
       video.pause();
