@@ -13,7 +13,7 @@
   <body>
     <a-scene>
       <!-- 360-degree image background -->
-      <a-sky src="./assets/Panorama.jpg" rotation="0 -130 0"></a-sky>
+      <a-sky src="./assets/oldfield.jpg" rotation="0 -130 0"></a-sky>
 
       <!-- Text in VR space -->
       <a-text font="kelsonsans" value="360 image with video" width="6" position="-2.5 0.25 -1.5" rotation="0 15 0"></a-text>
@@ -25,15 +25,11 @@
       <a-video src="./assets/coba.mp4" width="16" height="9" position="0 2 -10" id="video" visible="false"></a-video>
 
       <!-- Raycaster for Oculus interaction -->
-      <a-entity oculus-touch-controls="hand: both" raycaster="objects: #thumbnail" raycaster-show-line="true" raycaster-line-color="#4CC3D9"></a-entity>
+      <a-entity oculus-touch-controls="hand: right" raycaster="objects: #thumbnail" raycaster-show-line="true" raycaster-line-color="#4CC3D9"></a-entity>
 
       <!-- WebXR hand tracking with cursor -->
-      <a-entity id="leftHand" hand-tracking-controls="hand: left; modelColor: red;" raycaster="objects: .raycastable" scale="2 2 2">
-        <a-sphere radius="0.03" color="red"></a-sphere>
-      </a-entity>
-      <a-entity id="rightHand" hand-tracking-controls="hand: right; modelColor: green;" raycaster="objects: .raycastable" scale="2 2 2">
-        <a-sphere radius="0.03" color="green"></a-sphere>
-      </a-entity>
+      <a-entity hand-tracking-controls="hand: left; modelColor: red;"></a-entity>
+      <a-entity hand-tracking-controls="hand: right; modelColor: green;"></a-entity>
 
       <script>
         // Get the video element
@@ -61,17 +57,6 @@
             // Pause the video if it's playing
             video.pause();
           }
-        });
-
-        // Raycaster interaction for WebXR hand tracking
-        var handsEl = document.querySelectorAll('.raycastable');
-        handsEl.forEach(function (el) {
-          el.addEventListener('raycaster-intersected', function () {
-            if (video && !video.paused) {
-              // Pause the video if it's playing
-              video.pause();
-            }
-          });
         });
       </script>
     </a-scene>
