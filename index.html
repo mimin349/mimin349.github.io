@@ -29,10 +29,10 @@
       <script>
         // Get the video element
         var video = document.getElementById('video');
-
+      
         // Get the thumbnail element
         var thumbnail = document.getElementById('thumbnail');
-
+      
         // Function to toggle video playback
         function toggleVideo() {
           if (video && video.paused) {
@@ -45,7 +45,7 @@
             video.pause();
           }
         }
-
+      
         // Event listener for left hand laser
         var leftHand = document.getElementById('leftHand');
         leftHand.addEventListener('raycaster-intersected', function (event) {
@@ -53,7 +53,7 @@
             toggleVideo();
           }
         });
-
+      
         // Event listener for right hand laser
         var rightHand = document.getElementById('rightHand');
         rightHand.addEventListener('raycaster-intersected', function (event) {
@@ -61,11 +61,20 @@
             toggleVideo();
           }
         });
-
-        // Use triggerdown event for Oculus Touch controllers
-        leftHand.addEventListener('triggerdown', toggleVideo);
-        rightHand.addEventListener('triggerdown', toggleVideo);
-      </script>
+      
+        // Use the click event for Oculus Touch controllers
+        leftHand.addEventListener('click', function () {
+          if (leftHand.components['oculus-touch-controls'].isPressed('trigger')) {
+            toggleVideo();
+          }
+        });
+      
+        rightHand.addEventListener('click', function () {
+          if (rightHand.components['oculus-touch-controls'].isPressed('trigger')) {
+            toggleVideo();
+          }
+        });
+      </script>      
     </a-scene>
   </body>
 </html>
