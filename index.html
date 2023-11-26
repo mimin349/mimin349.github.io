@@ -26,6 +26,9 @@
       <!-- WebXR hand tracking with cursor (Left hand) -->
       <a-entity id="leftHand" oculus-touch-controls="hand: left" raycaster="showLine: true; far: 30;" line="color: red;"></a-entity>
 
+      <!-- WebXR hand tracking with cursor (Right hand) -->
+      <a-entity id="rightHand" oculus-touch-controls="hand: right" raycaster="showLine: true; far: 30;" line="color: green;"></a-entity>
+
       <script>
         // Register the clickable component
         AFRAME.registerComponent('clickable', {
@@ -45,16 +48,24 @@
               }
             }
 
-            // Event listener for laser intersection
+            // Event listener for laser intersection on the left hand
             el.addEventListener('raycaster-intersected', function (event) {
-              var hand = document.getElementById('leftHand');
-              if (hand) {
-                // Check if the trigger is pressed
-                if (hand.components['oculus-touch-controls'].isPressed('trigger')) {
-                  // Check if the intersected entity has the clickable component
-                  if (event.detail.el.components.clickable) {
-                    toggleVideo();
-                  }
+              var leftHand = document.getElementById('leftHand');
+              if (leftHand && leftHand.components['oculus-touch-controls'].isPressed('trigger')) {
+                // Check if the intersected entity has the clickable component
+                if (event.detail.el.components.clickable) {
+                  toggleVideo();
+                }
+              }
+            });
+
+            // Event listener for laser intersection on the right hand
+            el.addEventListener('raycaster-intersected', function (event) {
+              var rightHand = document.getElementById('rightHand');
+              if (rightHand && rightHand.components['oculus-touch-controls'].isPressed('trigger')) {
+                // Check if the intersected entity has the clickable component
+                if (event.detail.el.components.clickable) {
+                  toggleVideo();
                 }
               }
             });
