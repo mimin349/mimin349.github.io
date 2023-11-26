@@ -5,10 +5,6 @@
     <title>360&deg; Image with Video</title>
     <meta name="description" content="360&deg; Image with Video - A-Frame">
     <script src="https://aframe.io/releases/1.2.0/aframe.min.js"></script>
-    <script src="https://cdn.rawgit.com/donmccurdy/aframe-extras/v6.0.0/dist/aframe-extras.min.js"></script>
-    <script src="https://cdn.rawgit.com/donmccurdy/aframe-extras/v6.0.0/dist/aframe-extras.loaders.min.js"></script>
-    <script src="https://cdn.rawgit.com/donmccurdy/aframe-extras/v6.0.0/dist/aframe-extras.animation.min.js"></script>
-    <script src="https://cdn.rawgit.com/donmccurdy/aframe-extras/v6.0.0/dist/aframe-extras.controls.min.js"></script>
   </head>
   <body>
     <a-scene>
@@ -25,16 +21,10 @@
       <a-video src="./assets/coba.mp4" width="16" height="9" position="0 2 -10" id="video" visible="false"></a-video>
 
       <!-- WebXR hand tracking with cursor (Left hand) -->
-      <a-entity hand-tracking-controls="hand: left; modelColor: red;"></a-entity>
+      <a-entity id="leftHand" oculus-touch-controls="hand: left" raycaster="showLine: true; far: 5; objects: .raycastable" line="color: red;"></a-entity>
 
       <!-- WebXR hand tracking with cursor (Right hand) -->
-      <a-entity hand-tracking-controls="hand: right; modelColor: green;"></a-entity>
-
-      <!-- Laser cursor for left hand -->
-      <a-entity id="leftHand" raycaster="showLine: true; far: 5; objects: .raycastable" line="color: red;"></a-entity>
-
-      <!-- Laser cursor for right hand -->
-      <a-entity id="rightHand" raycaster="showLine: true; far: 5; objects: .raycastable" line="color: green;"></a-entity>
+      <a-entity id="rightHand" oculus-touch-controls="hand: right" raycaster="showLine: true; far: 5; objects: .raycastable" line="color: green;"></a-entity>
 
       <script>
         // Get the video element
