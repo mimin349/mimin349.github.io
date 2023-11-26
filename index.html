@@ -48,11 +48,6 @@
         <img src="assets/oldfield.jpg" id="360-image" crossorigin="anonymous">
       </a-assets>
 
-      <a-assets>
-        <img src="assets/white_grid_thin.png" id="grid" crossorigin="anonymous">
-        <video id="video-src" src="assets/interstellar.mp4"></video>
-      </a-assets>
-
       <!-- CURSOR -->
       <a-entity position="0 1.8 0">
         <a-entity camera look-controls mouse-cursor>
@@ -83,9 +78,7 @@
 
       <!-- ENVIRONMENT -->
       <!-- Mengganti latar belakang dengan gambar 360 derajat lokal -->
-      <a-entity
-          geometry="primitive: plane; width: 10000; height: 10000;" rotation="-90 0 0"
-          material="src: #360-image; repeat: 10000 10000; transparent: true; opacity:0.3;"></a-entity>
+      <a-sky src="#360-image"></a-sky>
       <a-entity light="color: #FFF; intensity: 1; type: ambient;"></a-entity>
       <!-- END ENVIRONMENT -->
     </a-scene>
