@@ -15,31 +15,31 @@
       <a-text font="kelsonsans" value="360 image with video" width="6" position="-2.5 0.25 -1.5" rotation="0 15 0"></a-text>
 
       <!-- Thumbnail image for the video -->
-      <a-image src="./assets/paul.jpg" width="8" height="4.5" position="0 2 -10" id="thumbnail" class="clickable"></a-image>
+      <a-image src="./assets/paul.jpg" width="8" height="4.5" position="0 2 -10" id="thumbnailImage" class="clickable"></a-image>
 
       <!-- Video player -->
       <a-video src="./assets/coba.mp4" width="16" height="9" position="0 2 -10" id="video" visible="false" class="clickable"></a-video>
 
       <!-- WebXR hand tracking with cursor (Left hand) -->
-      <a-entity id="leftHand" oculus-touch-controls="hand: left" raycaster="showLine: true; far: 30; objects: .clickable" line="color: red;"></a-entity>
+      <a-entity id="leftHand" oculus-touch-controls="hand: left" raycaster="showLine: true; far: 30;" line="color: red;"></a-entity>
 
       <!-- WebXR hand tracking with cursor (Right hand) -->
-      <a-entity id="rightHand" oculus-touch-controls="hand: right" raycaster="showLine: true; far: 30; objects: .clickable" line="color: green;"></a-entity>
+      <a-entity id="rightHand" oculus-touch-controls="hand: right" raycaster="showLine: true; far: 30;" line="color: green;"></a-entity>
 
       <script>
         // Get the video element
         var video = document.getElementById('video');
 
-        // Get the thumbnail element
-        var thumbnail = document.getElementById('thumbnail');
+        // Get the thumbnail image element
+        var thumbnailImage = document.getElementById('thumbnailImage');
 
         // Function to toggle video playback
         function toggleVideo() {
           if (video && video.paused) {
             // Play the video
             video.play();
-            // Hide the thumbnail
-            thumbnail.setAttribute('visible', 'false');
+            // Hide the thumbnail image
+            thumbnailImage.setAttribute('visible', 'false');
           } else {
             // Pause the video
             video.pause();
@@ -49,6 +49,7 @@
         // Event listener for left hand laser
         var leftHand = document.getElementById('leftHand');
         leftHand.addEventListener('raycaster-intersected', function (event) {
+          // Check if the intersected entity has the clickable class
           if (event.detail.el.classList.contains('clickable') && leftHand.components['oculus-touch-controls'].isPressed('trigger')) {
             toggleVideo();
           }
@@ -57,6 +58,7 @@
         // Event listener for right hand laser
         var rightHand = document.getElementById('rightHand');
         rightHand.addEventListener('raycaster-intersected', function (event) {
+          // Check if the intersected entity has the clickable class
           if (event.detail.el.classList.contains('clickable') && rightHand.components['oculus-touch-controls'].isPressed('trigger')) {
             toggleVideo();
           }
