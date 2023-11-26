@@ -45,6 +45,14 @@
                 videoContainer.setAttribute('visible', !videoContainer.getAttribute('visible'));
                 // Hide the thumbnail image
                 thumbnailImage.setAttribute('visible', 'false');
+                
+                // Start playing the video
+                if (videoContainer.getAttribute('visible')) {
+                  var video = document.getElementById('video');
+                  if (video) {
+                    video.play();
+                  }
+                }
               }
             }
 
