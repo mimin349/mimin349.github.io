@@ -24,19 +24,17 @@
       <!-- Video player -->
       <a-video src="./assets/coba.mp4" width="16" height="9" position="0 2 -10" id="video" visible="false"></a-video>
 
-      <!-- Raycaster for Oculus interaction (Right hand) -->
-      <a-entity id="rightHand" oculus-touch-controls="hand: right"></a-entity>
-      <a-entity id="rightLine" line="color: #4CC3D9; opacity: 0.75;"></a-entity>
-
-      <!-- Raycaster for Oculus interaction (Left hand) -->
-      <a-entity id="leftHand" oculus-touch-controls="hand: left"></a-entity>
-      <a-entity id="leftLine" line="color: #4CC3D9; opacity: 0.75;"></a-entity>
-
       <!-- WebXR hand tracking with cursor (Left hand) -->
       <a-entity hand-tracking-controls="hand: left; modelColor: red;"></a-entity>
 
       <!-- WebXR hand tracking with cursor (Right hand) -->
       <a-entity hand-tracking-controls="hand: right; modelColor: green;"></a-entity>
+
+      <!-- Laser cursor for left hand -->
+      <a-entity id="leftHand" raycaster="showLine: true; far: 5; objects: .raycastable" line="color: red;"></a-entity>
+
+      <!-- Laser cursor for right hand -->
+      <a-entity id="rightHand" raycaster="showLine: true; far: 5; objects: .raycastable" line="color: green;"></a-entity>
 
       <script>
         // Get the video element
@@ -57,61 +55,21 @@
           }
         }
 
-        // Set up always-visible laser cursor for Oculus controls (Right hand)
-        var rightHand = document.getElementById('rightHand');
-        var rightLine = document.getElementById('rightLine');
-
-        rightHand.addEventListener('controllerconnected', function () {
-          rightHand.addEventListener('axismove', function (event) {
-            // Show the laser cursor
-            rightLine.setAttribute('visible', 'true');
-            // Set laser cursor position and direction based on hand
-            rightLine.setAttribute('line', 'start', rightHand.object3D.position);
-            rightLine.setAttribute('line', 'end', event.detail.axis.map(a => a * 5));
-          });
-
-          rightHand.addEventListener('axismoveend', function () {
-            // Hide the laser cursor
-            rightLine.setAttribute('visible', 'false');
-            // Check if the laser is intersecting with the thumbnail
-            if (isIntersecting(rightHand, thumbnail)) {
-              // Perform the action when the thumbnail is clicked with the laser
-              toggleVideo();
-            }
-          });
-        });
-
-        // Set up always-visible laser cursor for Oculus controls (Left hand)
+        // Event listener for left hand laser
         var leftHand = document.getElementById('leftHand');
-        var leftLine = document.getElementById('leftLine');
-
-        leftHand.addEventListener('controllerconnected', function () {
-          leftHand.addEventListener('axismove', function (event) {
-            // Show the laser cursor
-            leftLine.setAttribute('visible', 'true');
-            // Set laser cursor position and direction based on hand
-            leftLine.setAttribute('line', 'start', leftHand.object3D.position);
-            leftLine.setAttribute('line', 'end', event.detail.axis.map(a => a * 5));
-          });
-
-          leftHand.addEventListener('axismoveend', function () {
-            // Hide the laser cursor
-            leftLine.setAttribute('visible', 'false');
-            // Check if the laser is intersecting with the thumbnail
-            if (isIntersecting(leftHand, thumbnail)) {
-              // Perform the action when the thumbnail is clicked with the laser
-              toggleVideo();
-            }
-          });
+        leftHand.addEventListener('raycaster-intersected', function (event) {
+          if (event.detail.el.id === 'thumbnail') {
+            toggleVideo();
+          }
         });
 
-        // Function to check if the laser intersects with an entity
-        function isIntersecting(controller, entity) {
-          var intersectedEls = controller.components['oculus-touch-controls'].intersections;
-          return intersectedEls.some(function (el) {
-            return el.object === entity.object3D;
-          });
-        }
+        // Event listener for right hand laser
+        var rightHand = document.getElementById('rightHand');
+        rightHand.addEventListener('raycaster-intersected', function (event) {
+          if (event.detail.el.id === 'thumbnail') {
+            toggleVideo();
+          }
+        });
       </script>
     </a-scene>
   </body>
