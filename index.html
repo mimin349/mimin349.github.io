@@ -5,6 +5,7 @@
     <title>Interactive 360&deg; Image with Video</title>
     <meta name="description" content="Interactive 360&deg; Image with Video - A-Frame">
     <script src="https://aframe.io/releases/1.2.0/aframe.min.js"></script>
+    <script src="https://cdn.rawgit.com/mayognaise/aframe-open-page-iframe/3dc8f2b8/dist/aframe-open-page-iframe.min.js"></script>
   </head>
   <body>
     <a-scene>
@@ -15,16 +16,15 @@
       <a-text font="kelsonsans" value="360 image with video" width="6" position="-2.5 0.25 -1.5" rotation="0 15 0"></a-text>
 
       <!-- Thumbnail image for the video -->
-      <a-image src="./assets/paul.jpg" width="8" height="4.5" position="0 2 -10" id="thumbnailImage" clickable></a-image>
+      <a-image src="./assets/paul.jpg" width="8" height="4.5" position="0 2 -10" id="thumbnailImage" clickable open-page-iframe="#video"></a-image>
 
-      <!-- Video player -->
-      <a-video src="./assets/coba.mp4" width="16" height="9" position="0 2 -10" id="video" visible="false" clickable></a-video>
+      <!-- Video player (hidden by default) -->
+      <a-entity id="videoContainer" open-page-iframe="#video">
+        <a-video src="./assets/coba.mp4" width="16" height="9" id="video" visible="false"></a-video>
+      </a-entity>
 
       <!-- WebXR hand tracking with cursor (Left hand) -->
       <a-entity id="leftHand" oculus-touch-controls="hand: left" raycaster="showLine: true; far: 30;" line="color: red;"></a-entity>
-
-      <!-- WebXR hand tracking with cursor (Right hand) -->
-      <a-entity id="rightHand" oculus-touch-controls="hand: right" raycaster="showLine: true; far: 30;" line="color: green;"></a-entity>
 
       <script>
         // Register the clickable component
@@ -34,17 +34,14 @@
 
             // Function to toggle video playback
             function toggleVideo() {
-              var video = document.getElementById('video');
+              var videoContainer = document.getElementById('videoContainer');
               var thumbnailImage = document.getElementById('thumbnailImage');
 
-              if (video && video.paused) {
-                // Play the video
-                video.play();
+              if (videoContainer) {
+                // Show/hide the video container
+                videoContainer.setAttribute('visible', !videoContainer.getAttribute('visible'));
                 // Hide the thumbnail image
                 thumbnailImage.setAttribute('visible', 'false');
-              } else {
-                // Pause the video
-                video.pause();
               }
             }
 
