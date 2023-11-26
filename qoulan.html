@@ -19,7 +19,7 @@
       <a-text font="kelsonsans" value="360 image with video" width="6" position="-2.5 0.25 -1.5" rotation="0 15 0"></a-text>
 
       <!-- Thumbnail image for the video -->
-      <a-image src="./assets/paul.jpg" width="16" height="9" position="0 2 -10" id="thumbnail" class="raycastable"></a-image>
+      <a-image src="./assets/Thumbnail TGTS.png" width="16" height="9" position="0 2 -10" id="thumbnail" class="raycastable"></a-image>
 
       <!-- Video player -->
       <a-video src="./assets/coba.mp4" width="16" height="9" position="0 2 -10" id="video" visible="false"></a-video>
@@ -79,6 +79,12 @@
               toggleVideo();
             }
           });
+
+          rightHand.addEventListener('click', function () {
+            if (rightHand.components.raycaster.intersectedEls.includes(thumbnail)) {
+              toggleVideo();
+            }
+          });
         });
 
         // Set up always-visible laser cursor for Oculus controls (Left hand)
@@ -100,6 +106,12 @@
             // Check if the laser is intersecting with the thumbnail
             if (isIntersecting(leftHand, thumbnail)) {
               // Perform the action when the thumbnail is clicked with the laser
+              toggleVideo();
+            }
+          });
+
+          leftHand.addEventListener('click', function () {
+            if (leftHand.components.raycaster.intersectedEls.includes(thumbnail)) {
               toggleVideo();
             }
           });
