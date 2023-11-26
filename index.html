@@ -7,7 +7,7 @@
     <script src="https://aframe.io/releases/1.2.0/aframe.min.js"></script>
   </head>
   <body>
-    <a-scene>
+    <a-scene check-triggers>
       <!-- 360-degree image background -->
       <a-sky src="./assets/oldfield.jpg" rotation="0 -130 0"></a-sky>
 
@@ -29,10 +29,14 @@
       <script>
         // Get the video element
         var video = document.getElementById('video');
-      
+
         // Get the thumbnail element
         var thumbnail = document.getElementById('thumbnail');
-      
+
+        // Variable to track trigger state
+        var leftTriggerPressed = false;
+        var rightTriggerPressed = false;
+
         // Function to toggle video playback
         function toggleVideo() {
           if (video && video.paused) {
@@ -45,36 +49,36 @@
             video.pause();
           }
         }
-      
+
         // Event listener for left hand laser
         var leftHand = document.getElementById('leftHand');
         leftHand.addEventListener('raycaster-intersected', function (event) {
-          if (event.detail.el.id === 'thumbnail') {
+          if (event.detail.el.id === 'thumbnail' && leftTriggerPressed) {
             toggleVideo();
           }
         });
-      
+
         // Event listener for right hand laser
         var rightHand = document.getElementById('rightHand');
         rightHand.addEventListener('raycaster-intersected', function (event) {
-          if (event.detail.el.id === 'thumbnail') {
+          if (event.detail.el.id === 'thumbnail' && rightTriggerPressed) {
             toggleVideo();
           }
         });
-      
-        // Use the click event for Oculus Touch controllers
-        leftHand.addEventListener('click', function () {
-          if (leftHand.components['oculus-touch-controls'].isPressed('trigger')) {
-            toggleVideo();
-          }
+
+        // Use the tick event for Oculus Touch controllers
+        AFRAME.registerComponent('check-triggers', {
+          tick: function () {
+            if (leftHand.components['oculus-touch-controls']) {
+              leftTriggerPressed = leftHand.components['oculus-touch-controls'].isPressed('trigger');
+            }
+
+            if (rightHand.components['oculus-touch-controls']) {
+              rightTriggerPressed = rightHand.components['oculus-touch-controls'].isPressed('trigger');
+            }
+          },
         });
-      
-        rightHand.addEventListener('click', function () {
-          if (rightHand.components['oculus-touch-controls'].isPressed('trigger')) {
-            toggleVideo();
-          }
-        });
-      </script>      
+      </script>
     </a-scene>
   </body>
 </html>
