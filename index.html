@@ -20,7 +20,7 @@
 
       <!-- Video player (hidden by default) -->
       <a-entity id="videoContainer" open-page-iframe="#video">
-        <a-video src="./assets/coba.mp4" width="16" height="9" id="video" visible="false"></a-video>
+        <a-video response-type="arraybuffer" id="video" visible="false"></a-video>
       </a-entity>
 
       <!-- WebXR hand tracking with cursor (Left hand) -->
@@ -39,19 +39,20 @@
             function toggleVideo() {
               var videoContainer = document.getElementById('videoContainer');
               var thumbnailImage = document.getElementById('thumbnailImage');
+              var video = document.getElementById('video');
 
-              if (videoContainer) {
+              if (videoContainer && video) {
                 // Show/hide the video container
                 videoContainer.setAttribute('visible', !videoContainer.getAttribute('visible'));
                 // Hide the thumbnail image
                 thumbnailImage.setAttribute('visible', 'false');
                 
+                // Set the video source (modify the video path accordingly)
+                video.setAttribute('src', './assets/coba.mp4');
+
                 // Start playing the video
                 if (videoContainer.getAttribute('visible')) {
-                  var video = document.getElementById('video');
-                  if (video) {
-                    video.play();
-                  }
+                  video.play();
                 }
               }
             }
