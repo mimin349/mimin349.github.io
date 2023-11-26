@@ -7,7 +7,7 @@
     <script src="https://aframe.io/releases/1.2.0/aframe.min.js"></script>
   </head>
   <body>
-    <a-scene>
+    <a-scene check-triggers>
       <!-- 360-degree image background -->
       <a-sky src="./assets/oldfield.jpg" rotation="0 -130 0"></a-sky>
 
@@ -15,25 +15,30 @@
       <a-text font="kelsonsans" value="360 image with video" width="6" position="-2.5 0.25 -1.5" rotation="0 15 0"></a-text>
 
       <!-- Thumbnail image for the video -->
-      <a-image src="./assets/paul.jpg" width="16" height="9" position="0 2 -10" id="thumbnail" class="raycastable"></a-image>
+      <a-image src="./assets/paul.jpg" width="8" height="4.5" position="0 2 -10" id="thumbnail" class="raycastable"></a-image>
 
       <!-- Video player -->
       <a-video src="./assets/coba.mp4" width="16" height="9" position="0 2 -10" id="video" visible="false"></a-video>
 
       <!-- WebXR hand tracking with cursor (Left hand) -->
-      <a-entity id="leftHand" oculus-touch-controls="hand: left" raycaster="showLine: true; far: 5; objects: .raycastable" line="color: red;"></a-entity>
+      <a-entity id="leftHand" oculus-touch-controls="hand: left" raycaster="showLine: true; far: 30; objects: .raycastable" line="color: red;"></a-entity>
 
       <!-- WebXR hand tracking with cursor (Right hand) -->
-      <a-entity id="rightHand" oculus-touch-controls="hand: right" raycaster="showLine: true; far: 5; objects: .raycastable" line="color: green;"></a-entity>
+      <a-entity id="rightHand" oculus-touch-controls="hand: right" raycaster="showLine: true; far: 30; objects: .raycastable" line="color: green;"></a-entity>
 
       <script>
         // Get the video element
         var video = document.getElementById('video');
 
+        // Get the thumbnail element
+        var thumbnail = document.getElementById('thumbnail');
+
+        // Variable to track trigger state
+        var leftTriggerPressed = false;
+        var rightTriggerPressed = false;
+
         // Function to toggle video playback
         function toggleVideo() {
-          var thumbnail = document.getElementById('thumbnail');
-
           if (video && video.paused) {
             // Play the video
             video.play();
@@ -48,7 +53,7 @@
         // Event listener for left hand laser
         var leftHand = document.getElementById('leftHand');
         leftHand.addEventListener('raycaster-intersected', function (event) {
-          if (event.detail.el.id === 'thumbnail') {
+          if (event.detail.el.id === 'thumbnail' && leftTriggerPressed) {
             toggleVideo();
           }
         });
@@ -56,9 +61,22 @@
         // Event listener for right hand laser
         var rightHand = document.getElementById('rightHand');
         rightHand.addEventListener('raycaster-intersected', function (event) {
-          if (event.detail.el.id === 'thumbnail') {
+          if (event.detail.el.id === 'thumbnail' && rightTriggerPressed) {
             toggleVideo();
           }
+        });
+
+        // Use the tick event for Oculus Touch controllers
+        AFRAME.registerComponent('check-triggers', {
+          tick: function () {
+            if (leftHand.components['oculus-touch-controls']) {
+              leftTriggerPressed = leftHand.components['oculus-touch-controls'].isPressed('trigger');
+            }
+
+            if (rightHand.components['oculus-touch-controls']) {
+              rightTriggerPressed = rightHand.components['oculus-touch-controls'].isPressed('trigger');
+            }
+          },
         });
       </script>
     </a-scene>
