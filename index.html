@@ -25,11 +25,11 @@
       <a-video src="./assets/coba.mp4" width="16" height="9" position="0 2 -10" id="video" visible="false"></a-video>
 
       <!-- Raycaster for Oculus interaction (Right hand) -->
-      <a-entity id="rightHand" oculus-touch-controls="hand: right" raycaster="objects: .raycastable"></a-entity>
+      <a-entity id="rightHand" oculus-touch-controls="hand: right"></a-entity>
       <a-entity id="rightLine" line="color: #4CC3D9; opacity: 0.75;"></a-entity>
 
       <!-- Raycaster for Oculus interaction (Left hand) -->
-      <a-entity id="leftHand" oculus-touch-controls="hand: left" raycaster="objects: .raycastable"></a-entity>
+      <a-entity id="leftHand" oculus-touch-controls="hand: left"></a-entity>
       <a-entity id="leftLine" line="color: #4CC3D9; opacity: 0.75;"></a-entity>
 
       <!-- WebXR hand tracking with cursor (Left hand) -->
@@ -42,11 +42,10 @@
         // Get the video element
         var video = document.getElementById('video');
 
-        // Get the thumbnail element
-        var thumbnail = document.getElementById('thumbnail');
-
         // Function to toggle video playback
         function toggleVideo() {
+          var thumbnail = document.getElementById('thumbnail');
+
           if (video && video.paused) {
             // Play the video
             video.play();
@@ -69,16 +68,16 @@
             // Set laser cursor position and direction based on hand
             rightLine.setAttribute('line', 'start', rightHand.object3D.position);
             rightLine.setAttribute('line', 'end', event.detail.axis.map(a => a * 5));
-
-            // Check for intersection with the thumbnail
-            if (rightHand.components.raycaster.intersectedEls.includes(thumbnail)) {
-              toggleVideo();
-            }
           });
 
           rightHand.addEventListener('axismoveend', function () {
             // Hide the laser cursor
             rightLine.setAttribute('visible', 'false');
+            // Check if the laser is intersecting with the thumbnail
+            if (isIntersecting(rightHand, thumbnail)) {
+              // Perform the action when the thumbnail is clicked with the laser
+              toggleVideo();
+            }
           });
         });
 
@@ -93,18 +92,26 @@
             // Set laser cursor position and direction based on hand
             leftLine.setAttribute('line', 'start', leftHand.object3D.position);
             leftLine.setAttribute('line', 'end', event.detail.axis.map(a => a * 5));
-
-            // Check for intersection with the thumbnail
-            if (leftHand.components.raycaster.intersectedEls.includes(thumbnail)) {
-              toggleVideo();
-            }
           });
 
           leftHand.addEventListener('axismoveend', function () {
             // Hide the laser cursor
             leftLine.setAttribute('visible', 'false');
+            // Check if the laser is intersecting with the thumbnail
+            if (isIntersecting(leftHand, thumbnail)) {
+              // Perform the action when the thumbnail is clicked with the laser
+              toggleVideo();
+            }
           });
         });
+
+        // Function to check if the laser intersects with an entity
+        function isIntersecting(controller, entity) {
+          var intersectedEls = controller.components['oculus-touch-controls'].intersections;
+          return intersectedEls.some(function (el) {
+            return el.object === entity.object3D;
+          });
+        }
       </script>
     </a-scene>
   </body>
