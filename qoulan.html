@@ -2,13 +2,9 @@
 <html lang="en">
   <head>
     <meta charset="utf-8">
-    <title>360&deg; Image with Video</title>
-    <meta name="description" content="360&deg; Image with Video - A-Frame">
+    <title>Interactive 360&deg; Image with Video</title>
+    <meta name="description" content="Interactive 360&deg; Image with Video - A-Frame">
     <script src="https://aframe.io/releases/1.2.0/aframe.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/aframe-extras@6.0.0/dist/aframe-extras.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/aframe-extras@6.0.0/dist/aframe-extras.loaders.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/aframe-extras@6.0.0/dist/aframe-extras.animation.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/aframe-extras@6.0.0/dist/aframe-extras.controls.min.js"></script>
   </head>
   <body>
     <a-scene>
@@ -19,112 +15,52 @@
       <a-text font="kelsonsans" value="360 image with video" width="6" position="-2.5 0.25 -1.5" rotation="0 15 0"></a-text>
 
       <!-- Thumbnail image for the video -->
-      <a-entity id="thumbnailContainer" class="raycastable">
-        <a-image src="./assets/Thumbnail TGTS.png" width="16" height="9" position="0 2 -10"></a-image>
-        <a-entity id="thumbnailRaycaster" geometry="primitive: plane; height: 16; width: 16;" material="visible: false" raycaster="objects: .raycastable"></a-entity>
-      </a-entity>
+      <a-image src="./assets/Thumbnail TGTS.png" width="8" height="4.5" position="0 2 -10" id="thumbnail" class="clickable"></a-image>
 
       <!-- Video player -->
-      <a-video src="./assets/coba.mp4" width="16" height="9" position="0 2 -10" id="video" visible="false"></a-video>
-
-      <!-- Raycaster for Oculus interaction (Right hand) -->
-      <a-entity id="rightHand" oculus-touch-controls="hand: right"></a-entity>
-      <a-entity id="rightLine" line="color: #4CC3D9; opacity: 0.75;"></a-entity>
-
-      <!-- Raycaster for Oculus interaction (Left hand) -->
-      <a-entity id="leftHand" oculus-touch-controls="hand: left"></a-entity>
-      <a-entity id="leftLine" line="color: #4CC3D9; opacity: 0.75;"></a-entity>
+      <a-video src="./assets/coba.mp4" width="16" height="9" position="0 2 -10" id="video" visible="false" class="clickable"></a-video>
 
       <!-- WebXR hand tracking with cursor (Left hand) -->
-      <a-entity hand-tracking-controls="hand: left; modelColor: red;"></a-entity>
+      <a-entity id="leftHand" oculus-touch-controls="hand: left" raycaster="showLine: true; far: 30; objects: .clickable" line="color: red;"></a-entity>
 
       <!-- WebXR hand tracking with cursor (Right hand) -->
-      <a-entity hand-tracking-controls="hand: right; modelColor: green;"></a-entity>
+      <a-entity id="rightHand" oculus-touch-controls="hand: right" raycaster="showLine: true; far: 30; objects: .clickable" line="color: green;"></a-entity>
 
       <script>
         // Get the video element
         var video = document.getElementById('video');
 
+        // Get the thumbnail element
+        var thumbnail = document.getElementById('thumbnail');
+
         // Function to toggle video playback
         function toggleVideo() {
-          var thumbnailContainer = document.getElementById('thumbnailContainer');
-
           if (video && video.paused) {
             // Play the video
             video.play();
             // Hide the thumbnail
-            thumbnailContainer.setAttribute('visible', 'false');
+            thumbnail.setAttribute('visible', false);
           } else {
             // Pause the video
             video.pause();
           }
         }
 
-        // Set up always-visible laser cursor for Oculus controls (Right hand)
-        var rightHand = document.getElementById('rightHand');
-        var rightLine = document.getElementById('rightLine');
-        var rightRaycaster = document.getElementById('rightLine');
-
-        rightHand.addEventListener('axismove', function (event) {
-          // Show the laser cursor
-          rightLine.setAttribute('visible', 'true');
-          // Set laser cursor position and direction based on hand
-          rightLine.setAttribute('line', 'start', rightHand.object3D.position);
-          rightLine.setAttribute('line', 'end', event.detail.axis.map(a => a * 5));
-        });
-
-        rightHand.addEventListener('axismoveend', function () {
-          // Hide the laser cursor
-          rightLine.setAttribute('visible', 'false');
-          // Check if the laser is intersecting with the thumbnail
-          if (isIntersecting(rightRaycaster, thumbnailContainer)) {
-            // Perform the action when the thumbnail is clicked with the laser
-            toggleVideo();
-          }
-        });
-
-        rightHand.addEventListener('click', function () {
-          if (rightRaycaster.components.raycaster.intersectedEls.includes(thumbnailContainer)) {
-            toggleVideo();
-          }
-        });
-
-        // Set up always-visible laser cursor for Oculus controls (Left hand)
+        // Event listener for left hand laser
         var leftHand = document.getElementById('leftHand');
-        var leftLine = document.getElementById('leftLine');
-        var leftRaycaster = document.getElementById('leftLine');
-
-        leftHand.addEventListener('axismove', function (event) {
-          // Show the laser cursor
-          leftLine.setAttribute('visible', 'true');
-          // Set laser cursor position and direction based on hand
-          leftLine.setAttribute('line', 'start', leftHand.object3D.position);
-          leftLine.setAttribute('line', 'end', event.detail.axis.map(a => a * 5));
-        });
-
-        leftHand.addEventListener('axismoveend', function () {
-          // Hide the laser cursor
-          leftLine.setAttribute('visible', 'false');
-          // Check if the laser is intersecting with the thumbnail
-          if (isIntersecting(leftRaycaster, thumbnailContainer)) {
-            // Perform the action when the thumbnail is clicked with the laser
+        leftHand.addEventListener('raycaster-intersected', function (event) {
+          if (event.detail.el.classList.contains('clickable') && leftHand.components['oculus-touch-controls'].isPressed('trigger')) {
             toggleVideo();
           }
         });
 
-        leftHand.addEventListener('click', function () {
-          if (leftRaycaster.components.raycaster.intersectedEls.includes(thumbnailContainer)) {
+        // Event listener for right hand laser
+        var rightHand = document.getElementById('rightHand');
+        rightHand.addEventListener('raycaster-intersected', function (event) {
+          if (event.detail.el.classList.contains('clickable') && rightHand.components['oculus-touch-controls'].isPressed('trigger')) {
             toggleVideo();
           }
         });
-
-        // Function to check if the laser intersects with an entity
-        function isIntersecting(raycaster, entity) {
-          var intersectedEls = raycaster.components.raycaster.intersectedEls;
-          return intersectedEls.some(function (el) {
-            return el.object3D === entity.object3D;
-          });
-        }
       </script>
     </a-scene>
   </body>
