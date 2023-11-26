@@ -43,9 +43,11 @@
         <img src="assets/volume-normal.png" id="volume-normal" crossorigin="anonymous">
         <img src="assets/volume-mute.png" id="volume-mute" crossorigin="anonymous">
         <img src="assets/seek-back.png" id="seek-back" crossorigin="anonymous">
+      </a-assets>
 
-        <!-- Gambar 360 derajat lokal -->
-        <img src="assets/oldfield.jpg" id="360-image" crossorigin="anonymous">
+      <a-assets>
+        <img src="assets/white_grid_thin.png" id="grid" crossorigin="anonymous">
+        <video id="video-src" src="assets/interstellar.mp4"></video>
       </a-assets>
 
       <!-- CURSOR -->
@@ -77,8 +79,10 @@
       <!-- END PROGRESSBAR -->
 
       <!-- ENVIRONMENT -->
-      <!-- Mengganti latar belakang dengan gambar 360 derajat lokal -->
-      <a-sky src="#360-image"></a-sky>
+      <a-entity
+          geometry="primitive: plane; width: 10000; height: 10000;" rotation="-90 0 0"
+          material="src: #grid; repeat: 10000 10000; transparent: true; opacity:0.3;"></a-entity>
+      <a-sky color="#dbdedb"></a-sky>
       <a-entity light="color: #FFF; intensity: 1; type: ambient;"></a-entity>
       <!-- END ENVIRONMENT -->
     </a-scene>
