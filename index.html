@@ -62,8 +62,9 @@
           }
         });
 
-        // Use mousedown event for Oculus Touch controllers
-        thumbnail.addEventListener('mousedown', toggleVideo);
+        // Use triggerdown event for Oculus Touch controllers
+        leftHand.addEventListener('triggerdown', toggleVideo);
+        rightHand.addEventListener('triggerdown', toggleVideo);
       </script>
     </a-scene>
   </body>
