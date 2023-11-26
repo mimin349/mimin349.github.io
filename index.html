@@ -33,10 +33,6 @@
         // Get the thumbnail element
         var thumbnail = document.getElementById('thumbnail');
 
-        // Variable to track trigger state
-        var leftTriggerPressed = false;
-        var rightTriggerPressed = false;
-
         // Function to toggle video playback
         function toggleVideo() {
           if (video && video.paused) {
@@ -53,7 +49,7 @@
         // Event listener for left hand laser
         var leftHand = document.getElementById('leftHand');
         leftHand.addEventListener('raycaster-intersected', function (event) {
-          if (event.detail.el.id === 'thumbnail' && leftTriggerPressed) {
+          if (event.detail.el.id === 'thumbnail' && leftHand.components['oculus-touch-controls'].isPressed('trigger')) {
             toggleVideo();
           }
         });
@@ -61,22 +57,9 @@
         // Event listener for right hand laser
         var rightHand = document.getElementById('rightHand');
         rightHand.addEventListener('raycaster-intersected', function (event) {
-          if (event.detail.el.id === 'thumbnail' && rightTriggerPressed) {
+          if (event.detail.el.id === 'thumbnail' && rightHand.components['oculus-touch-controls'].isPressed('trigger')) {
             toggleVideo();
           }
-        });
-
-        // Use the tick event for Oculus Touch controllers
-        AFRAME.registerComponent('check-triggers', {
-          tick: function () {
-            if (leftHand.components['oculus-touch-controls']) {
-              leftTriggerPressed = leftHand.components['oculus-touch-controls'].isPressed('trigger');
-            }
-
-            if (rightHand.components['oculus-touch-controls']) {
-              rightTriggerPressed = rightHand.components['oculus-touch-controls'].isPressed('trigger');
-            }
-          },
         });
       </script>
     </a-scene>
