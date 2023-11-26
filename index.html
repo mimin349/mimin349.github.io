@@ -15,7 +15,7 @@
       <a-text font="kelsonsans" value="360 image with video" width="6" position="-2.5 0.25 -1.5" rotation="0 15 0"></a-text>
 
       <!-- Thumbnail image for the video -->
-      <a-image src="./assets/paul.jpg" width="8" height="4.5" position="0 2 -10" id="thumbnail" class="raycastable" onclick="toggleVideo()"></a-image>
+      <a-image src="./assets/paul.jpg" width="8" height="4.5" position="0 2 -10" id="thumbnail" class="raycastable"></a-image>
 
       <!-- Video player -->
       <a-video src="./assets/coba.mp4" width="16" height="9" position="0 2 -10" id="video" visible="false"></a-video>
@@ -30,10 +30,11 @@
         // Get the video element
         var video = document.getElementById('video');
 
+        // Get the thumbnail element
+        var thumbnail = document.getElementById('thumbnail');
+
         // Function to toggle video playback
         function toggleVideo() {
-          var thumbnail = document.getElementById('thumbnail');
-
           if (video && video.paused) {
             // Play the video
             video.play();
@@ -60,6 +61,9 @@
             toggleVideo();
           }
         });
+
+        // Use mousedown event for Oculus Touch controllers
+        thumbnail.addEventListener('mousedown', toggleVideo);
       </script>
     </a-scene>
   </body>
