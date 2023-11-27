@@ -9,14 +9,14 @@
     
     <style type="text/css">
       #video-permission {
-        position: fixed;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 100%;
-        background: white;
-        z-index: 10000;
-        display: none;
+          position: fixed;
+          top: 0;
+          left: 0;
+          width: 100%;
+          height: 100%;
+          background: white;
+          z-index: 10000;
+          display: none;
       }
 
       #video-permission-button {
@@ -27,6 +27,7 @@
         height: 2em;
       }
     </style>
+
   </head>
   <body>
 
@@ -42,18 +43,22 @@
         <img src="assets/button/volume-normal.png" id="volume-normal" crossorigin="anonymous">
         <img src="assets/button/volume-mute.png" id="volume-mute" crossorigin="anonymous">
         <img src="assets/button/seek-back.png" id="seek-back" crossorigin="anonymous">
+      </a-assets>
+
+      <a-assets>
         <img src="./assets/Panorama.jpg" id="background" crossorigin="anonymous">
         <img src="./assets/Thumbnail TGTS.png" id="thumbnail" src="#video-src" width="16" height="9" crossorigin="anonymous">
         <video id="video-src" src="assets/tes.mp4"></video>
       </a-assets>
 
+      <!-- ENVIRONMENT -->
       <a-sky src="#background" rotation="0 -130 0"></a-sky>
+      <!-- END ENVIRONMENT -->
         
       <!-- CURSOR -->
       <a-entity position="0 1.8 0">
         <a-entity camera look-controls mouse-cursor stereocam="eye: left">
-          <a-cursor fuse="true" timeout="500" color="#F0F0F0" scale="0.6 0.6 0.6">
-          </a-cursor>
+          <a-cursor fuse="true" timeout="500" color="#F0F0F0" scale="0.6 0.6 0.6"></a-cursor>
         </a-entity>
       </a-entity>
       <!-- END CURSOR -->
@@ -74,7 +79,7 @@
           material="transparent: true; visible:false; opacity: 0;" position="0 0.1 -6">
         <a-plane id="progress-bar-track" width="4" height="0.06" color="black" position="0 0 0.005" opacity="0.2" visible="false"></a-plane>
         <a-plane id="progress-bar-fill" width="0" height="0.06" color="#7198e5" position="-2 0 0.01" visible="false"></a-plane>
-      </a-entity>
+      </a-plane>
       <!-- END PROGRESSBAR -->
     </a-scene>
 
@@ -118,6 +123,6 @@
           function showThumbnail() {
             document.getElementById('thumbnail').style.display = 'block';
           }
-      </script>
+    </script>
   </body>
 </html>
