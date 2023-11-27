@@ -1,67 +1,129 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
   <head>
     <meta charset="utf-8">
-    <title>Interactive 360&deg; Image with Video</title>
-    <meta name="description" content="Interactive 360&deg; Image with Video - A-Frame">
-    <script src="https://aframe.io/releases/1.2.0/aframe.min.js"></script>
+    <title>360 image with video</title>
+    <script src="https://aframe.io/releases/1.3.0/aframe.min.js"></script>
+    <script src="https://cdn.rawgit.com/donmccurdy/aframe-animation-components/master/dist/aframe-animation-components.min.js"></script>
+    <script src="https://unpkg.com/aframe-mouse-cursor-component/dist/aframe-mouse-cursor-component.min.js"></script>
+    
+    <style type="text/css">
+      #video-permission {
+          position: fixed;
+          top: 0;
+          left: 0;
+          width: 100%;
+          height: 100%;
+          background: white;
+          z-index: 10000;
+          display: none;
+      }
+
+      #video-permission-button {
+        position: fixed;
+        top: calc(50% - 1em);
+        left: calc(50% - 60px);
+        width: 120px;
+        height: 2em;
+      }
+    </style>
+
   </head>
   <body>
-    <a-scene>
-      <!-- 360-degree image background -->
-      <a-sky src="./assets/Panorama.jpg" rotation="0 -130 0"></a-sky>
 
-      <!-- Text in VR space -->
-      <a-text font="kelsonsans" value="360 image with video" width="6" position="-2.5 0.25 -1.5" rotation="0 15 0"></a-text>
+    <div id="video-permission">
+      <button id="video-permission-button">Allow VR video</button>
+    </div>
 
-      <!-- Thumbnail image for the video -->
-      <a-image src="./assets/Thumbnail TGTS.png" width="8" height="4.5" position="0 2 -10" id="thumbnail" class="clickable"></a-image>
+    <a-scene><!--Night mode: #0c192a-->
 
-      <!-- Video player -->
-      <a-video src="./assets/coba.mp4" width="16" height="9" position="0 2 -10" id="video" visible="false" class="clickable"></a-video>
+      <a-assets>
+        <img src="assets/button/play.png" id="play" crossorigin="anonymous">
+        <img src="assets/button/pause.png" id="pause" crossorigin="anonymous">
+        <img src="assets/button/volume-normal.png" id="volume-normal" crossorigin="anonymous">
+        <img src="assets/button/volume-mute.png" id="volume-mute" crossorigin="anonymous">
+        <img src="assets/button/seek-back.png" id="seek-back" crossorigin="anonymous">
+      </a-assets>
 
-      <!-- WebXR hand tracking with cursor (Left hand) -->
-      <a-entity id="leftHand" oculus-touch-controls="hand: left" raycaster="showLine: true; far: 30; objects: .clickable" line="color: red;"></a-entity>
+      <a-assets>
+        <img src="./assets/Panorama.jpg" id="background" rotation="0 -130 0" crossorigin="anonymous">
+        <img src="./assets/Thumbnail TGTS.png" id="thumbnail" src="#video-src" width="16" height="9" crossorigin="anonymous">
+        <video id="video-src" src="assets/tes.mp4"></video>
+      </a-assets>
 
-      <!-- WebXR hand tracking with cursor (Right hand) -->
-      <a-entity id="rightHand" oculus-touch-controls="hand: right" raycaster="showLine: true; far: 30; objects: .clickable" line="color: green;"></a-entity>
+      <!-- ENVIRONMENT -->
+      <a-sky src="#background" rotation="0 -130 0"></a-sky>
+      <!-- END ENVIRONMENT -->
+        
+      <!-- CURSOR -->
+      <a-entity position="0 1.8 0">
+        <a-entity camera look-controls mouse-cursor>
+          <a-cursor fuse="true" timeout="500" color="#F0F0F0" scale="0.6 0.6 0.6">
+          </a-cursor>
+        </a-entity>
+      </a-entity>
+      <!-- END CURSOR -->
 
-      <script>
-        // Get the video element
-        var video = document.getElementById('video');
+      <!-- MEDIAS HOLDER -->
+      <a-sound id="alert-sound" src="src: url(assets/button/action.wav)" autoplay="false" position="0 0 0"></a-sound>
+      <a-video id="video-screen" src="#video-src" position="0 4.5 -14" width="16" height="9"></a-video>
+      <!-- END MEDIAS HOLDER -->
 
-        // Get the thumbnail element
-        var thumbnail = document.getElementById('thumbnail');
+      <!-- CONTROLS -->
+      <a-image id="control-back" width="0.4" height="0.4" src="#seek-back" position="-0.8 0.6 -6" visible="false" scale="0.85 0.85 0.85"></a-image>
+      <a-image id="control-play" width="0.4" height="0.4" src="#play" position="0 0.6 -6"></a-image>
+      <a-image id="control-volume" width="0.4" height="0.4" src="#volume-normal" position="0.8 0.6 -6" visible="false" scale="0.75 0.75 0.75"></a-image>
+      <!-- END CONTROLS -->
 
-        // Function to toggle video playback
-        function toggleVideo() {
-          if (video && video.paused) {
-            // Play the video
-            video.play();
-            // Hide the thumbnail
-            thumbnail.setAttribute('visible', false);
-          } else {
-            // Pause the video
-            video.pause();
-          }
-        }
-
-        // Event listener for left hand laser
-        var leftHand = document.getElementById('leftHand');
-        leftHand.addEventListener('raycaster-intersected', function (event) {
-          if (event.detail.el.classList.contains('clickable') && leftHand.components['oculus-touch-controls'].isPressed('trigger')) {
-            toggleVideo();
-          }
-        });
-
-        // Event listener for right hand laser
-        var rightHand = document.getElementById('rightHand');
-        rightHand.addEventListener('raycaster-intersected', function (event) {
-          if (event.detail.el.classList.contains('clickable') && rightHand.components['oculus-touch-controls'].isPressed('trigger')) {
-            toggleVideo();
-          }
-        });
-      </script>
+      <!-- PROGRESSBAR -->
+      <a-entity id="progress-bar" geometry="primitive: plane; width: 4; height: 0.06;"
+          material="transparent: true; visible:false; opacity: 0;" position="0 0.1 -6">
+        <a-plane id="progress-bar-track" width="4" height="0.06" color="black" position="0 0 0.005" opacity="0.2" visible="false"></a-plane>
+        <a-plane id="progress-bar-fill" width="0" height="0.06" color="#7198e5" position="-2 0 0.01" visible="false"></a-plane>
+      </a-entity>
+      <!-- END PROGRESSBAR -->
     </a-scene>
+
+    <script src="js/AVideoPlayer.js"></script>
+    <script type="text/javascript">
+        let scene = document.querySelector('a-scene');
+        var cursor = document.querySelector('a-cursor');
+        
+        // AVideoPlayer
+        var videoPlayer = new AVideoPlayer();
+      
+        // CURSOR
+        let hideCursor = function() {
+          cursor.removeAttribute('animation__cursorHideLeave');
+          cursor.setAttribute('animation__cursorHideEnter', "property: scale; from: 0.6 0.6 0.6; to: 0 0 0; dur: 300; easing: easeInQuad;");
+        }
+      
+        let showCursor = function() {
+          cursor.removeAttribute('animation__cursorHideEnter');
+          cursor.setAttribute('animation__cursorHideLeave', "property: scale; from: 0 0 0; to: 0.6 0.6 0.6; dur: 300; easing: easeInQuad;");
+        }
+      
+        document.querySelector('#video-screen').addEventListener('mouseenter', hideCursor);
+        document.querySelector('#video-screen').addEventListener('mouseleave', showCursor);
+      
+        // Play button action
+        document.querySelector('#control-play').addEventListener('click', function () {
+          if (videoPlayer.paused) {
+            showCursor();  // Show cursor when video is paused
+            hideThumbnail();
+          } else {
+            hideCursor();  // Hide cursor when video is playing
+            showThumbnail();
+          }
+        });
+      
+        function hideThumbnail() {
+            document.getElementById('thumbnail').style.display = 'none';
+          }
+          
+          function showThumbnail() {
+            document.getElementById('thumbnail').style.display = 'block';
+          }
+      </script>
   </body>
 </html>
